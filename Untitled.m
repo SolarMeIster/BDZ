@@ -37,67 +37,70 @@ E = 14;
 T = [42 21 84];
 tao = [14 7 14];
 k = 1:300;
-head = {'Временная диаграмма для первого и третьего сигнала' 'Временная диаграмма для второго сигнала' 'Временная диаграмма для третьего сигнала'}
+head = {'Временная диаграмма для первого и третьего сигнала' 'Временная диаграмма для второго сигнала' 'Временная диаграмма для третьего сигнала'};
 for i = 1:3
 figure(3+i)
 hold on, grid on
-% q = T(i)/tao(i);
-% x = 2*pi/T(i);
-% syms t
-% A = sum((2.*E)./(k.*pi).*sin(k.*pi./q).*cos(k.*x.*t));
-% t = -10:0.1:50;
-% U = E/q + subs(A);
-% plot(t, U)
+q = T(i)/tao(i);
+x = 2*pi/T(i);
+syms t
+A = sum((2.*E)./(k.*pi).*sin(k.*pi./q).*cos(k.*x.*t));
+t = -10:0.1:50;
+U = E/q + subs(A);
+plot(t, U)
 
 t = (-10:.01:50);
 d = (0:T(i):50);
 x = E.*pulstran(t, d, @rectpuls, tao(i));
 plot(t, x)
 axis([-10 50 -2 16])
-title(head(i))
+% title(head(i))
+legend('Ряд Фурье', 'Сигнал')
 end
 
-figure(11)
+figure(13)
 hold on, grid on 
 x = E.*rectpuls(-10:0.01:10, 14);
 plot(-10:0.01:10, x)
 axis([-10 10 -2 16])
-title('Временная диаграмма для единичного четверого сигнала')
+title('Временная диаграмма для единичного четвертого сигнала')
 
-% 
-% for i = 1:3
-% figure(6+i)
-% hold on, grid on
-% q = T(i)/tao(i);
-% x = 2*pi/T(i);
-% syms t
-% A = sum((2.*E)./(k.*pi).*sin(k.*pi./q).*cos(k.*2.*x.*t));
-% t = -10:0.1:50;
-% U = E/q + subs(A)
-% plot(t, U)
-% 
-% t = (-10:.01:50);
-% d = (0:T(i):50)
-% x = E.*pulstran(t, d, @rectpuls, tao(i));
-% plot(t, x)
-% end
-% 
-% for i = 1:3
-% figure(9+i)
-% hold on, grid on
-% q = T(i)/tao(i);
-% x = 2*pi/T(i);
-% syms t
-% A = sum((2.*E)./(k.*pi).*sin(k.*pi./q).*cos(k.*3.*x.*t));
-% t = -10:0.1:50;
-% U = E/q + subs(A)
-% plot(t, U)
-% 
-% t = (-10:.01:50);
-% d = (0:T(i):50)
-% x = E.*pulstran(t, d, @rectpuls, tao(i));
-% plot(t, x)
-% end
+
+for i = 1:3
+figure(6+i)
+hold on, grid on
+q = T(i)/tao(i);
+x = 2*pi/T(i);
+syms t
+A = sum((2.*E)./(k.*pi).*sin(k.*pi./q).*cos(k.*2.*x.*t));
+t = -10:0.1:50;
+U = E/q + subs(A);
+plot(t, U)
+
+t = (-10:.01:50);
+d = (0:T(i):50);
+x = E.*pulstran(t, d, @rectpuls, tao(i));
+plot(t, x)
+legend('Ряд Фурье', 'Сигнал')
+end
+
+for i = 1:3
+figure(9+i)
+hold on, grid on
+q = T(i)/tao(i);
+x = 2*pi/T(i);
+syms t
+A = sum((2.*E)./(k.*pi).*sin(k.*pi./q).*cos(k.*3.*x.*t));
+t = -10:0.1:50;
+U = E/q + subs(A);
+plot(t, U)
+
+t = (-10:.01:50);
+d = (0:T(i):50);
+x = E.*pulstran(t, d, @rectpuls, tao(i));
+plot(t, x)
+legend('Ряд Фурье', 'Сигнал')
+end
 %--------------------------------------------------------------------------
 
 
