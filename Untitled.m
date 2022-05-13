@@ -1,105 +1,110 @@
 clear
 clc
 clf
-x = 0:0.01:10;
-x_dot = 0:1:10;
-
-%------------------------------Задание 1-----------------------------------
-figure(1)
-hold on, grid on
-y = (28./(pi.*x)).*abs(sin(pi.*x./3));
-y_dot = (28./(pi.*x_dot)).*abs(sin(pi.*x_dot./3));
-plot(x,y)
-plot(x_dot,y_dot, 'r*')
-title('Амплитудный спектр для второго сигнала')
-
-figure(2)
-hold on, grid on
-y = (28./(pi.*x)).*abs(sin(pi.*x./6));
-y_dot = (28./(pi.*x_dot)).*abs(sin(pi.*x_dot./6));
-plot(x,y)
-plot(x_dot,y_dot, 'r*')
-title('Амплитудный спектр для третьего сигнала')
-
-figure(3)
-hold on, grid on
-x = 0:0.01:2;
-x_dot = 0:1:2;
-y = (28./x).*abs(sin(7*x));
-y_dot = (28./x_dot).*abs(sin(7*x_dot));
-plot(x,y)
-plot(x_dot,y_dot, 'r*')
-title('Амплитудный спектр для четвертого сигнала')
-%--------------------------------------------------------------------------
-
-%------------------------------Задание -----------------------------------
+%--------------------------------Дано--------------------------------------
 E = 14;
 T = [42 21 84];
 tao = [14 7 14];
-k = 1:300;
+Ampl = 0;
+%------------------------------Векторы-------------------------------------
+t = (0:.01:100);
+w = 0:0.01:64/2/pi;
+w_dot = 0:1:64/2/pi;
+%--------------------------------------------------------------------------
+
 head = {'Временная диаграмма для первого и третьего сигнала' 'Временная диаграмма для второго сигнала' 'Временная диаграмма для третьего сигнала'};
-for i = 1:3
-figure(3+i)
-hold on, grid on
-q = T(i)/tao(i);
-x = 2*pi/T(i);
-syms t
-A = sum((2.*E)./(k.*pi).*sin(k.*pi./q).*cos(k.*x.*t));
-t = -10:0.1:50;
-U = E/q + subs(A);
-plot(t, U)
-
-t = (-10:.01:50);
-d = (0:T(i):50);
-x = E.*pulstran(t, d, @rectpuls, tao(i));
-plot(t, x)
-axis([-10 50 -2 16])
-% title(head(i))
-legend('Ряд Фурье', 'Сигнал')
+%------------------------------Задание 1-----------------------------------
+for i = 1:4
+    figure(i)
+    if (i == 4)
+        hold on, grid on
+        t1 = -10:.01:40;
+        x = E.*rectpuls(t1, 14);
+        plot(t1, x)
+        axis([-10 40 -10 25])
+    else
+        q = T(i)/tao(i);
+        d = (0:T(i):50);
+        x = E.*pulstran(t, d, @rectpuls, tao(i));
+        hold on, grid on
+        plot(t, x)
+        axis([0 50 -10 40])
+    end
+    title('Временная диаграмма сигнала')
 end
 
-figure(13)
-hold on, grid on 
-x = E.*rectpuls(-10:0.01:10, 14);
-plot(-10:0.01:10, x)
-axis([-10 10 -2 16])
-title('Временная диаграмма для единичного четвертого сигнала')
-
-
-for i = 1:3
-figure(6+i)
+figure(5)
 hold on, grid on
-q = T(i)/tao(i);
-x = 2*pi/T(i);
-syms t
-A = sum((2.*E)./(k.*pi).*sin(k.*pi./q).*cos(k.*2.*x.*t));
-t = -10:0.1:50;
-U = E/q + subs(A);
-plot(t, U)
-
-t = (-10:.01:50);
-d = (0:T(i):50);
-x = E.*pulstran(t, d, @rectpuls, tao(i));
-plot(t, x)
-legend('Ряд Фурье', 'Сигнал')
+y = (2./(pi.*w)).*abs(sin(pi.*w./3));
+y_dot = (2./(pi.*w_dot)).*abs(sin(pi.*w_dot./3));
+plot(w,y, '--')
+plot(w_dot,y_dot, 'k*')
+for k = 1:11
+    plot([w_dot(k) w_dot(k)], [0 y_dot(k)], 'k')
 end
+xlabel('F, Гц'), ylabel('C_k/E')
+title('Амплитудный спектр сигнала')
 
-for i = 1:3
-figure(9+i)
+figure(6)
 hold on, grid on
-q = T(i)/tao(i);
-x = 2*pi/T(i);
-syms t
-A = sum((2.*E)./(k.*pi).*sin(k.*pi./q).*cos(k.*3.*x.*t));
-t = -10:0.1:50;
-U = E/q + subs(A);
-plot(t, U)
+y = (2./(pi.*w)).*abs(sin(pi.*w./6));
+y_dot = (2./(pi.*w_dot)).*abs(sin(pi.*w_dot./6));
+plot(w,y, '--')
+plot(w_dot,y_dot, 'k*')
+for k = 1:11
+    plot([w_dot(k) w_dot(k)], [0 y_dot(k)], 'k')
+end
+xlabel('F, Гц'), ylabel('C_k/E')
+title('Амплитудный спектр сигнала')
 
-t = (-10:.01:50);
-d = (0:T(i):50);
-x = E.*pulstran(t, d, @rectpuls, tao(i));
-plot(t, x)
-legend('Ряд Фурье', 'Сигнал')
+figure(7)
+hold on, grid on
+w = 0:0.01:18/2/pi;
+w_dot = 0:1:18/2/pi;
+y = (2./w).*abs(sin(7*w));
+y_dot = (2./w_dot).*abs(sin(7*w_dot));
+plot(w,y, '--')
+plot(w_dot,y_dot, 'k*')
+for k = 1:3
+    plot([w_dot(k) w_dot(k)], [0 y_dot(k)], 'k')
+end
+xlabel('F, Гц'), ylabel('C_k/E')
+title('Амплитудный спектр сигнала')
+%--------------------------------------------------------------------------
+
+%------------------------------Задание 2-----------------------------------
+for i = 1:3
+    q = T(i)/tao(i);
+    w = 2*pi/T(i);
+    d = (0:T(i):50);
+    x = E.*pulstran(t, d, @rectpuls, tao(i));
+    figure(2*i+6)
+    hold on, grid on
+    plot(t, x)
+    plot([0 50], [E/q E/q], 'r')
+    axis([0 50 -10 40])
+    for k = 1:5
+        if (k ~= 3)
+            figure(6+2*i)
+            syms t
+            A = (2.*E)./(k.*pi).*sin(k.*pi./q).*cos(k.*w.*t);
+            Ampl = Ampl + A;
+            t = (0:.01:100);
+        	U = subs(A);
+            plot(t, U)
+        end
+        if (k == 5)
+            legend('Сигнал', 'Постоянная составляющая', 'Гармоника 1', 'Гармоника 2', 'Гармоника 4', 'Гармоника 5')          
+            figure(7+2*i)
+            hold on, grid on
+            U = E/q + subs(Ampl);
+            plot(t, x)
+            plot(t, U)
+            axis([0 50 -4 20])
+            legend('Сигнал', 'Сумма гармоник 1-5')
+            Ampl = 0;
+        end
+    end
 end
 %--------------------------------------------------------------------------
 
